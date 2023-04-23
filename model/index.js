@@ -232,7 +232,6 @@ app.get("/salaire/:poste/:ech", (req, res) => {
 
 app.get("/irg/:mensuelParam", (req, res) => {
     const { mensuelParam } = req.params;
-    console.log("mensuel:", mensuelParam); // log the value of mensuel
 
     const formattedMensuel = Number(mensuelParam).toLocaleString("en-US", {
         minimumFractionDigits: 2,
@@ -240,7 +239,6 @@ app.get("/irg/:mensuelParam", (req, res) => {
     });
 
     const query = `SELECT IRG FROM IRG WHERE Mensuel = "${formattedMensuel}"`;
-    console.log("query:", query); // log the SQL query to the console
 
     db.all(query, (err, rows) => {
         if (err) {
@@ -249,7 +247,6 @@ app.get("/irg/:mensuelParam", (req, res) => {
             return;
         }
 
-        console.log(rows); // log the result to debug the issue
         res.status(200).json(rows);
     });
 });
