@@ -7,7 +7,7 @@ const Tab = ({ content }) => {
 
     return (
         <div className="Tab">
-            <h1 className="title">🇩🇿 Logiciel de gestion de paie</h1>
+            <h1 className="title">Logiciel de gestion de paie</h1>
             <ul className="nav">
                 <li
                     onClick={() => {

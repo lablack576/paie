@@ -21,6 +21,7 @@ const Add = () => {
         Prenom: "",
         Pret: "",
         Prime_caisse: "",
+        allocation_familial: "",
         Prime_technicite: "",
     });
 
@@ -56,6 +57,7 @@ const Add = () => {
                 Prenom: "",
                 Pret: "",
                 Prime_caisse: "",
+                allocation_familial: "",
                 Prime_technicite: "",
             });
             return response.data;
@@ -196,12 +198,11 @@ const Add = () => {
                                 Indice de salaire unique
                             </label>
                             <input
-                                type="number"
+                                type="checkbox"
+                                checked={employe.Indice_salaire_unique}
                                 name="Indice_salaire_unique"
-                                value={employe.Indice_salaire_unique}
                                 onChange={handleChange}
                                 placeholder="Indice de salaire unique"
-                                required
                             />
                         </div>
 
@@ -219,6 +220,16 @@ const Add = () => {
                             />
                         </div>
                         <div>
+                            <label htmlFor="allocation_familial">
+                                Allocation familial
+                            </label>
+                            <input
+                                type="checkbox"
+                                checked={employe.allocation_familial}
+                                name="allocation_familial"
+                                onChange={handleChange}
+                                placeholder="Allocation familial"
+                            />
                             <label htmlFor="Prime_caisse">
                                 Prime de caisse
                             </label>

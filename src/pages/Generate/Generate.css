@@ -1,0 +1,15 @@
+.pivot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem !important;
+    flex-direction: row !important;
+}
+
+.pivot button {
+    padding: 0.2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: serif;
+    cursor: pointer;
+}

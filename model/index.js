@@ -19,20 +19,6 @@ const db = new sqlite3.Database("mydatabase.db", (err) => {
     }
 });
 
-// Execute SELECT statement
-app.get("/users", (req, res) => {
-    const sql = "SELECT * FROM users";
-
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            console.error(err.message);
-            res.status(500).send("Server error");
-        } else {
-            res.json(rows);
-        }
-    });
-});
-
 // Retrieve collective data
 app.get("/collective", (req, res) => {
     db.all("SELECT * FROM collective", (error, rows) => {
@@ -47,11 +33,24 @@ app.get("/collective", (req, res) => {
 
 // Update collective data
 app.put("/collective", (req, res) => {
-    const { PRC, Indice_panier, Prime_caisse, RET, Indice_salaire_unique } =
-        req.body;
+    const {
+        PRC,
+        Indice_panier,
+        Prime_caisse,
+        RET,
+        Indice_salaire_unique,
+        allocation_familial,
+    } = req.body;
     db.run(
-        "UPDATE collective SET PRC = ?, Indice_panier = ?, Prime_caisse = ?, RET = ?, Indice_salaire_unique = ?",
-        [PRC, Indice_panier, Prime_caisse, RET, Indice_salaire_unique],
+        "UPDATE collective SET PRC = ?, Indice_panier = ?, Prime_caisse = ?, RET = ?, Indice_salaire_unique = ?,allocation_familial=?",
+        [
+            PRC,
+            Indice_panier,
+            Prime_caisse,
+            RET,
+            Indice_salaire_unique,
+            allocation_familial,
+        ],
         (error) => {
             if (error) {
                 console.error(error);
@@ -197,6 +196,62 @@ app.post("/employees/add", (req, res) => {
             }
         }
     );
+});
+
+app.get("/salaire/:poste/:ech", (req, res) => {
+    const { poste, ech } = req.params;
+
+    db.all(
+        `SELECT Cat, Sec FROM nomenclature WHERE Poste = ? LIMIT 1`,
+        [poste],
+        (error, rows) => {
+            if (error) {
+                console.error(error);
+                res.status(500).send("Internal Server Error");
+                return;
+            }
+
+            const cats = rows.map((row) => row.Cat).join(",");
+            const secs = rows.map((row) => row.Sec).join(",");
+
+            db.get(
+                `SELECT Ind FROM grille_de_salaire WHERE Ech = ? AND Cat IN (${cats}) AND Sec IN (${secs})`,
+                [ech],
+                (error, row) => {
+                    if (error) {
+                        console.error(error);
+                        res.status(500).send("Internal Server Error");
+                    } else {
+                        res.status(200).json(row);
+                    }
+                }
+            );
+        }
+    );
+});
+
+app.get("/irg/:mensuelParam", (req, res) => {
+    const { mensuelParam } = req.params;
+    console.log("mensuel:", mensuelParam); // log the value of mensuel
+
+    const formattedMensuel = Number(mensuelParam).toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+
+    const query = `SELECT IRG FROM IRG WHERE Mensuel = "${formattedMensuel}"`;
+    console.log("query:", query); // log the SQL query to the console
+
+    db.all(query, (err, rows) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Internal Server Error");
+            return;
+        }
+
+        console.log(rows); // log the result to debug the issue
+        res.status(200).json(rows);
+    });
 });
 
 // Start the server

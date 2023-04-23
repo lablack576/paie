@@ -8,6 +8,7 @@ const ParametresContent = () => {
         Prime_caisse: "",
         RET: "",
         Indice_salaire_unique: "",
+        allocation_familial: "",
     });
 
     useEffect(() => {
@@ -21,6 +22,7 @@ const ParametresContent = () => {
                     RET: response.data[0].RET,
                     Indice_salaire_unique:
                         response.data[0].Indice_salaire_unique,
+                    allocation_familial: response.data[0].allocation_familial,
                 });
             })
             .catch((error) => {
@@ -102,6 +104,19 @@ const ParametresContent = () => {
                         value={form.Indice_salaire_unique}
                         onChange={handleChange}
                         placeholder="Indice salaire unique"
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="allocation_familial">
+                        Allocation familiale
+                    </label>
+                    <input
+                        type="number"
+                        name="allocation_familial"
+                        value={form.allocation_familial}
+                        onChange={handleChange}
+                        placeholder="Allocation familiale"
                         required
                     />
                 </div>

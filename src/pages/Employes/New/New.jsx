@@ -23,6 +23,7 @@ const New = () => {
         Prenom: "",
         Pret: "",
         Prime_caisse: "",
+        allocation_familial: "",
         Prime_technicite: "",
     });
 
@@ -56,6 +57,7 @@ const New = () => {
                     Prenom: response.data.Prenom,
                     Pret: response.data.Pret,
                     Prime_caisse: response.data.Prime_caisse,
+                    allocation_familial: response.data.allocation_familial,
                     Prime_technicite: response.data.Prime_technicite,
                 });
             } catch (error) {
@@ -217,12 +219,11 @@ const New = () => {
                                     Indice de salaire unique
                                 </label>
                                 <input
-                                    type="number"
+                                    type="checkbox"
+                                    checked={employe.Indice_salaire_unique}
                                     name="Indice_salaire_unique"
-                                    value={employe.Indice_salaire_unique}
                                     onChange={handleChange}
                                     placeholder="Indice de salaire unique"
-                                    required
                                 />
                             </div>
 
@@ -240,6 +241,16 @@ const New = () => {
                                 />
                             </div>
                             <div>
+                                <label htmlFor="allocation_familial">
+                                    Allocation familial
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    checked={employe.allocation_familial}
+                                    name="allocation_familial"
+                                    onChange={handleChange}
+                                    placeholder="Allocation familial"
+                                />
                                 <label htmlFor="Prime_caisse">
                                     Prime de caisse
                                 </label>
