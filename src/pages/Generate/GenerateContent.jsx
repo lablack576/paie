@@ -67,6 +67,7 @@ const GenerateContent = () => {
                 "salaire_brute",
                 "salaire_imposable",
                 "IRG",
+                "salaire_net",
             ],
         });
         XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
@@ -187,6 +188,20 @@ const GenerateContent = () => {
                                         "."
                                     )[0]
                                 );
+                                updatedEmployees[currentIndex].salaire_net =
+                                    parseInt(
+                                        employees[currentIndex]
+                                            .salaire_imposable -
+                                            employees[currentIndex].Pret +
+                                            (employees[currentIndex]
+                                                .Indice_salaire_unique &&
+                                                form.Indice_salaire_unique) +
+                                            (employees[currentIndex]
+                                                .allocation_familial &&
+                                                form.allocation_familial) +
+                                            form.RET -
+                                            updatedEmployees[currentIndex].IRG
+                                    );
                                 return updatedEmployees;
                             });
                         })
@@ -215,13 +230,6 @@ const GenerateContent = () => {
                     }}
                 >
                     Générer le Journal de paie
-                </button>
-                <button
-                    onClick={() => {
-                        console.log("clicked");
-                    }}
-                >
-                    Générer les fiches de paies
                 </button>
             </div>
         );
