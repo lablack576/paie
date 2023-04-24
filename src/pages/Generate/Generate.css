@@ -13,3 +13,26 @@
     font-family: serif;
     cursor: pointer;
 }
+
+.final_finished {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.final_finished button {
+    cursor: pointer;
+    grid-column: -1/1;
+    padding: 0.4rem 0.8rem;
+    border: 0.1rem solid;
+    border-radius: 0.8rem;
+    transition: 0.2s ease-out;
+    box-shadow: -0.4rem 0.4rem #181213;
+    color: #181213;
+    background-color: #fef9f3;
+    font-family: serif;
+    text-transform: uppercase;
+    font-weight: 600;
+}

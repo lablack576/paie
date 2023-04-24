@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import XLSX from "xlsx";
 
 const GenerateContent = () => {
     const [employees, setEmployees] = useState();
@@ -38,6 +39,40 @@ const GenerateContent = () => {
             });
     }, []);
 
+    const exportToExcel = (data) => {
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(data, {
+            header: [
+                "Matricule",
+                "Nom",
+                "Prenom",
+                "Date_naissance",
+                "Date_recrutement",
+                "NSS",
+                "Poste",
+                "Ech",
+                "IND_Transport",
+                "Indice_salaire_unique",
+                "IEP",
+                "PRI",
+                "Prime_technicite",
+                "Pret",
+                "Avance",
+                "Prime_caisse",
+                "allocation_familial",
+                "Ind",
+                "Salaire_base",
+                "Salaire_cotisable",
+                "Retenu_ss",
+                "salaire_brute",
+                "salaire_imposable",
+                "IRG",
+            ],
+        });
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
+        XLSX.writeFile(workbook, "Journal de paie.xlsx");
+    };
+
     useEffect(() => {
         const fetchEmployees = async () => {
             const res = await axios.get(`http://localhost:3001/employees`);
@@ -51,7 +86,6 @@ const GenerateContent = () => {
             setCurrentIndex(currentIndex + 1);
         } else {
             setIsFinished(true);
-            console.log(employees);
         }
     };
 
@@ -164,7 +198,6 @@ const GenerateContent = () => {
                 });
 
                 handleNext();
-                console.log(response.data);
                 // Handle successful update here
             })
             .catch((error) => {
@@ -174,7 +207,24 @@ const GenerateContent = () => {
     };
 
     if (isFinished) {
-        return <div>Good job!</div>;
+        return (
+            <div className="final_finished">
+                <button
+                    onClick={() => {
+                        exportToExcel(employees);
+                    }}
+                >
+                    Générer le Journal de paie
+                </button>
+                <button
+                    onClick={() => {
+                        console.log("clicked");
+                    }}
+                >
+                    Générer les fiches de paies
+                </button>
+            </div>
+        );
     }
 
     return employees ? (
