@@ -3,10 +3,12 @@ import "./New.css";
 import { useParams } from "react-router-dom";
 import Tab from "../../../Components/Tab/Tab";
 import axios from "axios";
-import { FaBackward } from "react-icons/fa";
+import { FaBackward, FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const New = () => {
     const { itemID } = useParams();
+    const navigate = useNavigate();
     const [employe, setEmploye] = useState({
         Avance: "",
         Date_naissance: "",
@@ -41,6 +43,7 @@ const New = () => {
                 const response = await axios.get(
                     `http://localhost:3001/employees/${itemID}`
                 );
+                console.log(response.data);
                 setEmploye({
                     Avance: response.data.Avance,
                     Date_naissance: response.data.Date_naissance,
@@ -84,6 +87,17 @@ const New = () => {
             });
     };
 
+    const handleDelete = (matricule) => {
+        axios
+            .delete(`http://localhost:3001/employeesDelete/${matricule}`)
+            .then((response) => {
+                console.log("Employee record deleted successfully");
+                navigate("/");
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
     return (
         <Tab
             content={
@@ -94,6 +108,12 @@ const New = () => {
                             className="return"
                         >
                             <span>Retour</span> <FaBackward />
+                        </p>
+                        <p
+                            onClick={() => handleDelete(itemID)}
+                            className="return"
+                        >
+                            <span>Effacer</span> <FaTrash />
                         </p>
                         <form className="newForm" onSubmit={handleSubmit}>
                             <div>
@@ -171,6 +191,8 @@ const New = () => {
                             <div>
                                 <label htmlFor="Ech">Echelon</label>
                                 <input
+                                    min="1"
+                                    max="18"
                                     type="number"
                                     name="Ech"
                                     value={employe.Ech}
@@ -182,6 +204,8 @@ const New = () => {
                             <div>
                                 <label htmlFor="IEP">IEP</label>
                                 <input
+                                    min="0"
+                                    max="60"
                                     type="number"
                                     name="IEP"
                                     value={employe.IEP}
@@ -193,6 +217,8 @@ const New = () => {
                             <div>
                                 <label htmlFor="PRI">PRI</label>
                                 <input
+                                    min="0"
+                                    max="20"
                                     type="number"
                                     name="PRI"
                                     value={employe.PRI}
@@ -218,13 +244,14 @@ const New = () => {
                                 <label htmlFor="Indice_salaire_unique">
                                     Indice de salaire unique
                                 </label>
-                                <input
-                                    type="checkbox"
-                                    checked={employe.Indice_salaire_unique}
+                                <select
                                     name="Indice_salaire_unique"
+                                    value={employe.Indice_salaire_unique}
                                     onChange={handleChange}
-                                    placeholder="Indice de salaire unique"
-                                />
+                                >
+                                    <option value="On">Allouer</option>
+                                    <option value={0}>Ne pas allouer</option>
+                                </select>
                             </div>
 
                             <div>
@@ -244,23 +271,25 @@ const New = () => {
                                 <label htmlFor="allocation_familial">
                                     Allocation familial
                                 </label>
-                                <input
-                                    type="checkbox"
-                                    checked={employe.allocation_familial}
+                                <select
                                     name="allocation_familial"
+                                    value={employe.allocation_familial}
                                     onChange={handleChange}
-                                    placeholder="Allocation familial"
-                                />
+                                >
+                                    <option value="On">Allouer</option>
+                                    <option value={0}>Ne pas allouer</option>
+                                </select>
                                 <label htmlFor="Prime_caisse">
                                     Prime de caisse
                                 </label>
-                                <input
-                                    type="checkbox"
-                                    checked={employe.Prime_caisse}
+                                <select
                                     name="Prime_caisse"
+                                    value={employe.Prime_caisse}
                                     onChange={handleChange}
-                                    placeholder="Prime de caisse"
-                                />
+                                >
+                                    <option value="On">Allouer</option>
+                                    <option value={0}>Ne pas allouer</option>
+                                </select>
                             </div>
                             <div>
                                 <label htmlFor="Pret">Prêt</label>

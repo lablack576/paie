@@ -150,6 +150,8 @@ const Add = () => {
                         <div>
                             <label htmlFor="Ech">Echelon</label>
                             <input
+                                min="1"
+                                max="18"
                                 type="number"
                                 name="Ech"
                                 value={employe.Ech}
@@ -161,6 +163,8 @@ const Add = () => {
                         <div>
                             <label htmlFor="IEP">IEP</label>
                             <input
+                                min="0"
+                                max="60"
                                 type="number"
                                 name="IEP"
                                 value={employe.IEP}
@@ -172,6 +176,8 @@ const Add = () => {
                         <div>
                             <label htmlFor="PRI">PRI</label>
                             <input
+                                min="0"
+                                max="20"
                                 type="number"
                                 name="PRI"
                                 value={employe.PRI}
@@ -197,13 +203,14 @@ const Add = () => {
                             <label htmlFor="Indice_salaire_unique">
                                 Indice de salaire unique
                             </label>
-                            <input
-                                type="checkbox"
-                                checked={employe.Indice_salaire_unique}
+                            <select
                                 name="Indice_salaire_unique"
+                                value={employe.Indice_salaire_unique}
                                 onChange={handleChange}
-                                placeholder="Indice de salaire unique"
-                            />
+                            >
+                                <option value="On">Allouer</option>
+                                <option value={0}>Ne pas allouer</option>
+                            </select>
                         </div>
 
                         <div>
@@ -223,23 +230,25 @@ const Add = () => {
                             <label htmlFor="allocation_familial">
                                 Allocation familial
                             </label>
-                            <input
-                                type="checkbox"
-                                checked={employe.allocation_familial}
+                            <select
                                 name="allocation_familial"
+                                value={employe.allocation_familial}
                                 onChange={handleChange}
-                                placeholder="Allocation familial"
-                            />
+                            >
+                                <option value="On">Allouer</option>
+                                <option value={0}>Ne pas allouer</option>
+                            </select>
                             <label htmlFor="Prime_caisse">
                                 Prime de caisse
                             </label>
-                            <input
-                                type="checkbox"
-                                checked={employe.Prime_caisse}
+                            <select
                                 name="Prime_caisse"
+                                value={employe.Prime_caisse}
                                 onChange={handleChange}
-                                placeholder="Prime de caisse"
-                            />
+                            >
+                                <option value="On">Allouer</option>
+                                <option value={0}>Ne pas allouer</option>
+                            </select>
                         </div>
                         <div>
                             <label htmlFor="Pret">Prêt</label>

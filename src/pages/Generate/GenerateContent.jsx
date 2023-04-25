@@ -139,11 +139,10 @@ const GenerateContent = () => {
                     updatedEmployees[currentIndex].Salaire_cotisable = parseInt(
                         updatedEmployees[currentIndex].Salaire_base +
                             updatedEmployees[currentIndex].Salaire_base *
-                                (updatedEmployees[currentIndex].IEP +
-                                    updatedEmployees[currentIndex].PRI +
-                                    updatedEmployees[currentIndex]
-                                        .Prime_technicite +
-                                    form.PRC)
+                                (updatedEmployees[currentIndex].IEP / 100 +
+                                    updatedEmployees[currentIndex].PRI / 100 +
+                                    form.PRC / 100) +
+                            updatedEmployees[currentIndex].Prime_technicite
                     );
                     return updatedEmployees;
                 });
@@ -159,9 +158,9 @@ const GenerateContent = () => {
                     updatedEmployees[currentIndex].salaire_brute = parseInt(
                         updatedEmployees[currentIndex].Salaire_cotisable +
                             form.Indice_panier * 400 +
+                            updatedEmployees[currentIndex].IND_Transport +
                             (updatedEmployees[currentIndex].Prime_caisse &&
-                                form.Prime_caisse) +
-                            updatedEmployees[currentIndex].IND_Transport
+                                form.Prime_caisse)
                     );
                     return updatedEmployees;
                 });
@@ -190,17 +189,20 @@ const GenerateContent = () => {
                                 );
                                 updatedEmployees[currentIndex].salaire_net =
                                     parseInt(
-                                        employees[currentIndex]
-                                            .salaire_imposable -
-                                            employees[currentIndex].Pret +
+                                        employees[currentIndex].salaire_brute +
+                                            employees[currentIndex].Retenu_ss -
+                                            updatedEmployees[currentIndex].IRG -
+                                            employees[currentIndex].Pret -
+                                            employees[currentIndex].Avance +
+                                            form.RET +
                                             (employees[currentIndex]
-                                                .Indice_salaire_unique &&
-                                                form.Indice_salaire_unique) +
+                                                .Indice_salaire_unique
+                                                ? form.Indice_salaire_unique
+                                                : 0) +
                                             (employees[currentIndex]
-                                                .allocation_familial &&
-                                                form.allocation_familial) +
-                                            form.RET -
-                                            updatedEmployees[currentIndex].IRG
+                                                .allocation_familial
+                                                ? form.allocation_familial
+                                                : 0)
                                     );
                                 return updatedEmployees;
                             });
@@ -211,7 +213,6 @@ const GenerateContent = () => {
 
                     return updatedEmployees;
                 });
-
                 handleNext();
                 // Handle successful update here
             })
@@ -235,7 +236,7 @@ const GenerateContent = () => {
         );
     }
 
-    return employees ? (
+    return (employees ? employees.length !== 0 : false) ? (
         <>
             <h1>
                 Employé {currentIndex + 1} sur {employees.length}
@@ -256,6 +257,8 @@ const GenerateContent = () => {
                 <div>
                     <label htmlFor="PRI">PRI</label>
                     <input
+                        min="0"
+                        max="20"
                         type="number"
                         name="PRI"
                         value={employees[currentIndex].PRI}
@@ -284,6 +287,8 @@ const GenerateContent = () => {
                 <div>
                     <label htmlFor="Absence">Absence</label>
                     <input
+                        min="0"
+                        max="31"
                         type="number"
                         name="Absence"
                         value={
@@ -315,7 +320,7 @@ const GenerateContent = () => {
             </form>
         </>
     ) : (
-        "Chargement"
+        "Liste vide, veuillez d'abord saisir des employées"
     );
 };
 

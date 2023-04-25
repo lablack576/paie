@@ -114,9 +114,10 @@ app.put("/employees/:id", (req, res) => {
         Pret,
         Prime_caisse,
         Prime_technicite,
+        allocation_familial,
     } = req.body;
     db.run(
-        "UPDATE employees SET Avance=?,Date_naissance=?,Date_recrutement=?,Ech=?,IEP=?,IND_Transport=?,Indice_salaire_unique=?,NSS=?,Nom=?,PRI=?,Poste=?,Prenom=?,Pret=?,Prime_caisse=?,Prime_technicite=? WHERE Matricule = ?",
+        "UPDATE employees SET Avance=?,Date_naissance=?,Date_recrutement=?,Ech=?,IEP=?,IND_Transport=?,Indice_salaire_unique=?,NSS=?,Nom=?,PRI=?,Poste=?,Prenom=?,Pret=?,Prime_caisse=?,Prime_technicite=?,allocation_familial=? WHERE Matricule = ?",
         [
             Avance,
             Date_naissance,
@@ -133,6 +134,7 @@ app.put("/employees/:id", (req, res) => {
             Pret,
             Prime_caisse,
             Prime_technicite,
+            allocation_familial,
             id,
         ],
         (err) => {
@@ -163,12 +165,13 @@ app.post("/employees/add", (req, res) => {
         Pret,
         Prime_caisse,
         Prime_technicite,
+        allocation_familial,
     } = req.body;
 
     const matricule = Math.floor(Math.random() * 1000000);
 
     db.run(
-        "INSERT INTO employees (Matricule, Avance, Date_naissance, Date_recrutement, Ech, IEP, IND_Transport, Indice_salaire_unique, NSS, Nom, PRI, Poste, Prenom, Pret, Prime_caisse, Prime_technicite) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO employees (Matricule, Avance, Date_naissance, Date_recrutement, Ech, IEP, IND_Transport, Indice_salaire_unique, NSS, Nom, PRI, Poste, Prenom, Pret, Prime_caisse, Prime_technicite,allocation_familial) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?)",
         [
             matricule,
             Avance,
@@ -186,6 +189,7 @@ app.post("/employees/add", (req, res) => {
             Pret,
             Prime_caisse,
             Prime_technicite,
+            allocation_familial,
         ],
         (err) => {
             if (err) {
@@ -196,6 +200,20 @@ app.post("/employees/add", (req, res) => {
             }
         }
     );
+});
+
+app.delete("/employeesDelete/:id", (req, res) => {
+    const id = req.params.id;
+
+    // Run a SQL DELETE statement to remove the employee with the given Matricule ID
+    db.run("DELETE FROM employees WHERE Matricule = ?", [id], (err) => {
+        if (err) {
+            console.error(err.message);
+            res.status(500).send("Internal server error");
+        } else {
+            res.status(204).send(); // Return a "No Content" response on successful deletion
+        }
+    });
 });
 
 app.get("/salaire/:poste/:ech", (req, res) => {
@@ -241,6 +259,40 @@ app.get("/irg/:mensuelParam", (req, res) => {
     const query = `SELECT IRG FROM IRG WHERE Mensuel = "${formattedMensuel}"`;
 
     db.all(query, (err, rows) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Internal Server Error");
+            return;
+        }
+
+        res.status(200).json(rows);
+    });
+});
+
+app.post("/users", async (req, res) => {
+    const { username, password } = req.body;
+
+    const id = Math.floor(Math.random() * 1000);
+
+    const query = `INSERT INTO users (id, username, password) VALUES (?,?,?)`;
+
+    db.run(query, [id, username, password], (err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Internal Server Error");
+            return;
+        }
+
+        res.status(200).json({ message: "User added successfully" });
+    });
+});
+
+app.get("/users/login", async (req, res) => {
+    const { username, password } = req.body;
+
+    const query = `SELECT * FROM users WHERE username = ? AND password = ?`;
+
+    db.all(query, [username, password], (err, rows) => {
         if (err) {
             console.error(err);
             res.status(500).send("Internal Server Error");

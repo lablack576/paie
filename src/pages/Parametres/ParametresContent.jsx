@@ -53,6 +53,8 @@ const ParametresContent = () => {
                 <div>
                     <label htmlFor="PRC">PRC</label>
                     <input
+                        min="0"
+                        max="20"
                         type="number"
                         name="PRC"
                         value={form.PRC}
@@ -69,6 +71,8 @@ const ParametresContent = () => {
                         value={form.Indice_panier}
                         onChange={handleChange}
                         placeholder="Indice panier"
+                        min="0"
+                        max="31"
                         required
                     />
                 </div>
