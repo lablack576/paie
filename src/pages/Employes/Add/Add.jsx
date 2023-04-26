@@ -3,16 +3,20 @@ import "./Add.css";
 import Tab from "../../../Components/Tab/Tab";
 import axios from "axios";
 import { FaBackward } from "react-icons/fa";
+import { useRecoilValue } from "recoil";
+import { auth } from "../../../atoms/auth";
 
 const Add = () => {
+    const { uid } = useRecoilValue(auth);
     const [employe, setEmploye] = useState({
+        id: uid,
         Avance: "",
         Date_naissance: "",
         Date_recrutement: "",
         Ech: "",
         IEP: "",
         IND_Transport: "",
-        Indice_salaire_unique: "",
+        Indice_salaire_unique: "On",
         Matricule: "",
         NSS: "",
         Nom: "",
@@ -20,8 +24,8 @@ const Add = () => {
         Poste: "",
         Prenom: "",
         Pret: "",
-        Prime_caisse: "",
-        allocation_familial: "",
+        Prime_caisse: "On",
+        allocation_familial: "On",
         Prime_technicite: "",
     });
 
@@ -30,18 +34,19 @@ const Add = () => {
         setEmploye((prevEmploye) => ({
             ...prevEmploye,
             [name]: e.target.value,
+            id: uid,
         }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.post(
                 "http://localhost:3001/employees/add",
                 employe
             );
             setEmploye({
+                id: "",
                 Avance: "",
                 Date_naissance: "",
                 Date_recrutement: "",

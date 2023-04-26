@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { auth } from "../../atoms/auth";
 
 const ParametresContent = () => {
+    const { uid } = useRecoilValue(auth);
     const [form, setForm] = useState({
+        id: uid,
         PRC: "",
         Indice_panier: "",
         Prime_caisse: "",
@@ -13,9 +17,10 @@ const ParametresContent = () => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:3001/collective")
+            .get(`http://localhost:3001/collective/${uid}`)
             .then((response) => {
                 setForm({
+                    id: uid,
                     PRC: response.data[0].PRC,
                     Indice_panier: response.data[0].Indice_panier,
                     Prime_caisse: response.data[0].Prime_caisse,
@@ -28,7 +33,7 @@ const ParametresContent = () => {
             .catch((error) => {
                 console.error(error);
             });
-    }, []);
+    }, [uid]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

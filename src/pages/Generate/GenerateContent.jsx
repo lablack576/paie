@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import XLSX from "xlsx";
+import { useRecoilValue } from "recoil";
+import { auth } from "../../atoms/auth";
 
 const GenerateContent = () => {
+    const { uid } = useRecoilValue(auth);
     const [employees, setEmployees] = useState();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
@@ -17,7 +20,7 @@ const GenerateContent = () => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:3001/collective")
+            .get(`http://localhost:3001/collective/${uid}`)
             .then((response) => {
                 setForm({
                     PRC: response.data[0].PRC,
@@ -76,11 +79,13 @@ const GenerateContent = () => {
 
     useEffect(() => {
         const fetchEmployees = async () => {
-            const res = await axios.get(`http://localhost:3001/employees`);
+            const res = await axios.get(
+                `http://localhost:3001/employees?id=${uid}`
+            );
             setEmployees(res.data);
         };
         fetchEmployees();
-    }, []);
+    }, [uid]);
 
     const handleNext = () => {
         if (currentIndex < employees.length - 1) {

@@ -5,18 +5,22 @@ import Tab from "../../../Components/Tab/Tab";
 import axios from "axios";
 import { FaBackward, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { auth } from "../../../atoms/auth";
 
 const New = () => {
+    const { uid } = useRecoilValue(auth);
     const { itemID } = useParams();
     const navigate = useNavigate();
     const [employe, setEmploye] = useState({
+        id: "",
         Avance: "",
         Date_naissance: "",
         Date_recrutement: "",
         Ech: "",
         IEP: "",
         IND_Transport: "",
-        Indice_salaire_unique: "",
+        Indice_salaire_unique: "On",
         Matricule: "",
         NSS: "",
         Nom: "",
@@ -24,8 +28,8 @@ const New = () => {
         Poste: "",
         Prenom: "",
         Pret: "",
-        Prime_caisse: "",
-        allocation_familial: "",
+        Prime_caisse: "On",
+        allocation_familial: "On",
         Prime_technicite: "",
     });
 
@@ -41,10 +45,10 @@ const New = () => {
         const fetchEmployee = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:3001/employees/${itemID}`
+                    `http://localhost:3001/employees/${itemID}/${uid}`
                 );
-                console.log(response.data);
                 setEmploye({
+                    id: uid,
                     Avance: response.data.Avance,
                     Date_naissance: response.data.Date_naissance,
                     Date_recrutement: response.data.Date_recrutement,
@@ -68,7 +72,7 @@ const New = () => {
             }
         };
         fetchEmployee();
-    }, [itemID]);
+    }, [itemID, uid]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -89,7 +93,7 @@ const New = () => {
 
     const handleDelete = (matricule) => {
         axios
-            .delete(`http://localhost:3001/employeesDelete/${matricule}`)
+            .delete(`http://localhost:3001/employeesDelete/${matricule}/${uid}`)
             .then((response) => {
                 console.log("Employee record deleted successfully");
                 navigate("/");

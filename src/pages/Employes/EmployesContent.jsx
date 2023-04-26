@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiSearch, FiEye } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { auth } from "../../atoms/auth";
 
 const EmployesContent = () => {
+    const { uid } = useRecoilValue(auth);
     const [employees, setEmployees] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -13,12 +16,12 @@ const EmployesContent = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             const res = await axios.get(
-                `http://localhost:3001/employees?search=${searchTerm}`
+                `http://localhost:3001/employees?search=${searchTerm}&id=${uid}`
             );
             setEmployees(res.data);
         };
         fetchEmployees();
-    }, [searchTerm]);
+    }, [searchTerm, uid]);
 
     const indexOfLastEmployee = currentPage * employeesPerPage;
     const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;

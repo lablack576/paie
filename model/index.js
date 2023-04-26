@@ -20,8 +20,9 @@ const db = new sqlite3.Database("mydatabase.db", (err) => {
 });
 
 // Retrieve collective data
-app.get("/collective", (req, res) => {
-    db.all("SELECT * FROM collective", (error, rows) => {
+app.get("/collective/:id", (req, res) => {
+    const id = req.params.id;
+    db.all("SELECT * FROM collective where id=?", [id], (error, rows) => {
         if (error) {
             console.error(error);
             res.status(500).send("Internal Server Error");
@@ -40,9 +41,10 @@ app.put("/collective", (req, res) => {
         RET,
         Indice_salaire_unique,
         allocation_familial,
+        id,
     } = req.body;
     db.run(
-        "UPDATE collective SET PRC = ?, Indice_panier = ?, Prime_caisse = ?, RET = ?, Indice_salaire_unique = ?,allocation_familial=?",
+        "UPDATE collective SET PRC = ?, Indice_panier = ?, Prime_caisse = ?, RET = ?, Indice_salaire_unique = ?,allocation_familial=? WHERE id=?",
         [
             PRC,
             Indice_panier,
@@ -50,6 +52,7 @@ app.put("/collective", (req, res) => {
             RET,
             Indice_salaire_unique,
             allocation_familial,
+            id,
         ],
         (error) => {
             if (error) {
@@ -64,12 +67,13 @@ app.put("/collective", (req, res) => {
 
 app.get("/employees", (req, res) => {
     const searchTerm = req.query.search;
-    let sql = "SELECT * FROM employees";
-    let params = [];
+    const id = req.query.id;
+    let sql = "SELECT * FROM employees WHERE id=?";
+    let params = [id];
 
     if (searchTerm) {
-        sql += " WHERE Nom LIKE ? OR Prenom LIKE ?";
-        params = [`%${searchTerm}%`, `%${searchTerm}%`];
+        sql += " AND (Nom LIKE ? OR Prenom LIKE ?)";
+        params = [id, `%${searchTerm}%`, `%${searchTerm}%`];
     }
 
     db.all(sql, params, (err, rows) => {
@@ -82,22 +86,27 @@ app.get("/employees", (req, res) => {
     });
 });
 
-app.get("/employees/:id", (req, res) => {
-    const id = req.params.id;
-    db.get("SELECT * FROM employees WHERE Matricule = ?", [id], (err, row) => {
-        if (err) {
-            console.error(err.message);
-            res.status(500).send("Internal server error");
-        } else if (!row) {
-            res.status(404).send("Employee not found");
-        } else {
-            res.send(row);
+app.get("/employees/:id/:uid", (req, res) => {
+    const idlink = req.params.id;
+    const id = req.params.uid;
+    db.get(
+        "SELECT * FROM employees WHERE Matricule = ? AND id = ?",
+        [idlink, id],
+        (err, row) => {
+            if (err) {
+                console.error(err.message);
+                res.status(500).send("Internal server error");
+            } else if (!row) {
+                res.status(404).send("Employee not found");
+            } else {
+                res.send(row);
+            }
         }
-    });
+    );
 });
 
 app.put("/employees/:id", (req, res) => {
-    const id = req.params.id;
+    const idlink = req.params.id;
     const {
         Avance,
         Date_naissance,
@@ -115,9 +124,10 @@ app.put("/employees/:id", (req, res) => {
         Prime_caisse,
         Prime_technicite,
         allocation_familial,
+        id,
     } = req.body;
     db.run(
-        "UPDATE employees SET Avance=?,Date_naissance=?,Date_recrutement=?,Ech=?,IEP=?,IND_Transport=?,Indice_salaire_unique=?,NSS=?,Nom=?,PRI=?,Poste=?,Prenom=?,Pret=?,Prime_caisse=?,Prime_technicite=?,allocation_familial=? WHERE Matricule = ?",
+        "UPDATE employees SET Avance=?,Date_naissance=?,Date_recrutement=?,Ech=?,IEP=?,IND_Transport=?,Indice_salaire_unique=?,NSS=?,Nom=?,PRI=?,Poste=?,Prenom=?,Pret=?,Prime_caisse=?,Prime_technicite=?,allocation_familial=? WHERE Matricule = ? AND id = ?",
         [
             Avance,
             Date_naissance,
@@ -135,6 +145,7 @@ app.put("/employees/:id", (req, res) => {
             Prime_caisse,
             Prime_technicite,
             allocation_familial,
+            idlink,
             id,
         ],
         (err) => {
@@ -166,12 +177,13 @@ app.post("/employees/add", (req, res) => {
         Prime_caisse,
         Prime_technicite,
         allocation_familial,
+        id,
     } = req.body;
 
     const matricule = Math.floor(Math.random() * 1000000);
 
     db.run(
-        "INSERT INTO employees (Matricule, Avance, Date_naissance, Date_recrutement, Ech, IEP, IND_Transport, Indice_salaire_unique, NSS, Nom, PRI, Poste, Prenom, Pret, Prime_caisse, Prime_technicite,allocation_familial) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?)",
+        "INSERT INTO employees (Matricule, Avance, Date_naissance, Date_recrutement, Ech, IEP, IND_Transport, Indice_salaire_unique, NSS, Nom, PRI, Poste, Prenom, Pret, Prime_caisse, Prime_technicite,allocation_familial, id) VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
             matricule,
             Avance,
@@ -190,6 +202,7 @@ app.post("/employees/add", (req, res) => {
             Prime_caisse,
             Prime_technicite,
             allocation_familial,
+            id,
         ],
         (err) => {
             if (err) {
@@ -202,18 +215,22 @@ app.post("/employees/add", (req, res) => {
     );
 });
 
-app.delete("/employeesDelete/:id", (req, res) => {
-    const id = req.params.id;
-
+app.delete("/employeesDelete/:id/:uid", (req, res) => {
+    const id = req.params.uid;
+    const idlink = req.params.id;
     // Run a SQL DELETE statement to remove the employee with the given Matricule ID
-    db.run("DELETE FROM employees WHERE Matricule = ?", [id], (err) => {
-        if (err) {
-            console.error(err.message);
-            res.status(500).send("Internal server error");
-        } else {
-            res.status(204).send(); // Return a "No Content" response on successful deletion
+    db.run(
+        "DELETE FROM employees WHERE Matricule = ? AND id = ?",
+        [idlink, id],
+        (err) => {
+            if (err) {
+                console.error(err.message);
+                res.status(500).send("Internal server error");
+            } else {
+                res.status(204).send(); // Return a "No Content" response on successful deletion
+            }
         }
-    });
+    );
 });
 
 app.get("/salaire/:poste/:ech", (req, res) => {
@@ -271,24 +288,27 @@ app.get("/irg/:mensuelParam", (req, res) => {
 
 app.post("/users", async (req, res) => {
     const { username, password } = req.body;
-
     const id = Math.floor(Math.random() * 1000);
-
     const query = `INSERT INTO users (id, username, password) VALUES (?,?,?)`;
+    const query2 =
+        "INSERT INTO collective (PRC, Indice_panier, Prime_caisse, RET , Indice_salaire_unique, allocation_familial, id) VALUES (10,22,0,400,1000,1000,?)";
 
-    db.run(query, [id, username, password], (err) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send("Internal Server Error");
-            return;
-        }
+    try {
+        await db.run("BEGIN");
+        await db.run(query, [id, username, password]);
+        await db.run(query2, [id]);
+        const user = await db.get("SELECT * FROM users WHERE id = ?", [id]);
+        await db.run("COMMIT");
 
-        res.status(200).json({ message: "User added successfully" });
-    });
+        res.status(200).json({ id: id, username: username });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 app.get("/users/login", async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password } = req.query;
 
     const query = `SELECT * FROM users WHERE username = ? AND password = ?`;
 
