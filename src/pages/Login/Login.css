@@ -59,3 +59,7 @@
 .formX span:hover {
     text-decoration: underline;
 }
+
+.formX .inc {
+    color: #fff;
+}

@@ -64,7 +64,11 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                {error && <p>Nom d'utilisateur ou mot de passe incorret</p>}
+                {error && (
+                    <p className="inc">
+                        Nom d'utilisateur ou mot de passe incorret
+                    </p>
+                )}
                 <br />
                 <button type="submit">Se connecter</button>
                 <br />
@@ -75,6 +79,7 @@ const Login = () => {
                             navigate("/Register");
                         }}
                     >
+                        {" "}
                         Inscrivez-vous.
                     </span>
                 </p>

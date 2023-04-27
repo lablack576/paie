@@ -61,7 +61,11 @@ const Register = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                {error && <p>Nom d'utilisateur ou mot de passe incorret</p>}
+                {error && (
+                    <p className="inc">
+                        Nom d'utilisateur ou mot de passe incorret
+                    </p>
+                )}
                 <br />
                 <button type="submit">Créer un compte</button>
                 <br />
@@ -72,6 +76,7 @@ const Register = () => {
                             navigate("/Login");
                         }}
                     >
+                        {" "}
                         Connectez-vous.
                     </span>
                 </p>

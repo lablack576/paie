@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #0e0e0e;
     font-family: "Open Sans", sans-serif;
     color: #fff;
@@ -26,19 +26,27 @@
 
 .Tab ul.nav li,
 .Tab ul li {
-    margin: 0 10px;
+    margin: 0 8px;
     font-size: 24px;
     cursor: pointer;
     transition: color 0.3s ease;
 }
 
-.Tab ul.nav li:hover,
-.Tab ul li:hover {
+.Tab ul.nav li:hover {
     color: #ffae1a;
 }
 
 .Tab ul li {
-    margin-top: 20px;
+    margin-top: 1rem;
+}
+
+.Tab .vvv li {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.Tab .vvv li:hover {
+    color: #fff;
 }
 
 .Tab ul li a,
@@ -49,8 +57,19 @@
     transition: color 0.3s ease;
 }
 
-.Tab ul li a:hover,
-.Tab ul li a:hover {
+.Tab .vvv li a {
+    background-color: #ffae1a;
+    padding: 0.2rem 0.8rem;
+    border-radius: 5px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.Tab .vvv li a:hover {
+    padding: 0.2rem 1rem;
+}
+
+.Tab ul.nav li a:hover {
     color: #ffae1a;
 }
 

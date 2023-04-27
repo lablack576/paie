@@ -62,7 +62,7 @@ const EmployesContent = () => {
     }
 
     return (
-        <div className="EmployesContent">
+        <div className="employes-content">
             <div className="header">
                 <h1>Liste des employés</h1>
                 <button
