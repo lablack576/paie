@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useSetRecoilState } from "recoil";
 import { auth } from "../../atoms/auth";
-import "./Register.css";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {

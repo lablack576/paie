@@ -45,6 +45,35 @@ const Tab = ({ content }) => {
                     Déconnexion
                 </li>
             </ul>
+            <ul>
+                <li>
+                    <a
+                        rel="noreferrer"
+                        href="https://docs.google.com/spreadsheets/d/1TfcSETC2keNaInGJzZhqHeI0AzOjGSxa/edit?usp=sharing&ouid=103241180489139027903&rtpof=true&sd=true"
+                        target="_blank"
+                    >
+                        Nomenclature
+                    </a>
+                </li>
+                <li>
+                    <a
+                        rel="noreferrer"
+                        href="https://docs.google.com/spreadsheets/d/1vSq5sODAdOIPAuraxIMK0n__PZyIcHn_/edit?usp=sharing&ouid=103241180489139027903&rtpof=true&sd=true"
+                        target="_blank"
+                    >
+                        IRG
+                    </a>
+                </li>
+                <li>
+                    <a
+                        rel="noreferrer"
+                        href="https://docs.google.com/spreadsheets/d/1s2P1Y7LQZJ5vBShhtZdwVoDjcWOKPuKS/edit?usp=sharing&ouid=103241180489139027903&rtpof=true&sd=true"
+                        target="_blank"
+                    >
+                        Grille de salaire
+                    </a>
+                </li>
+            </ul>
             <div className="content">{content}</div>
         </div>
     );

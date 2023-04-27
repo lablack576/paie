@@ -1,93 +1,62 @@
 .Tab {
-    width: 100%;
-    min-height: 100vh;
-    overflow: visible;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
     display: flex;
-    align-items: center;
-    padding: 1.2rem;
     flex-direction: column;
-    gap: 2.4rem;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #0e0e0e;
+    font-family: "Open Sans", sans-serif;
+    color: #fff;
 }
 
-.title {
-    padding: 1.2rem 2.4rem;
-    border: 0.1rem solid;
-    border-radius: 0.8rem;
-    transition: 0.2s ease-out;
-    box-shadow: -0.4rem 0.4rem #181213;
-    color: #181213;
-    background-color: #fef9f3;
+.Tab .title {
+    font-size: 36px;
+    margin-bottom: 20px;
 }
 
-/* .title:hover {
-    scale: 1.02;
-} */
-
-.nav {
+.Tab ul.nav,
+.Tab ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2.4rem;
 }
 
-.nav li {
-    padding: 1.2rem 2.4rem;
-    border: 0.1rem solid;
-    border-radius: 0.8rem;
+.Tab ul.nav li,
+.Tab ul li {
+    margin: 0 10px;
+    font-size: 24px;
     cursor: pointer;
-    transition: 0.2s ease-out;
-    box-shadow: -0.4rem 0.4rem #181213;
+    transition: color 0.3s ease;
 }
 
-.nav li:nth-child(1) {
-    color: #181213;
-    background-color: #008235;
+.Tab ul.nav li:hover,
+.Tab ul li:hover {
+    color: #ffae1a;
 }
 
-.nav li:nth-child(2) {
-    color: #181213;
-    background-color: #d6d6d6;
+.Tab ul li {
+    margin-top: 20px;
 }
 
-.nav li:nth-child(3) {
-    color: #181213;
-    background-color: #fe0006;
+.Tab ul li a,
+.Tab ul li a {
+    color: #fff;
+    font-size: 18px;
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-.nav li:hover {
-    scale: 1.04;
+.Tab ul li a:hover,
+.Tab ul li a:hover {
+    color: #ffae1a;
 }
 
-.footer {
-    position: sticky;
-    bottom: 0;
-    width: 100%;
-    height: 60px;
-}
-
-.footer p {
-    text-align: center;
-    padding: 1.2rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-.content {
-    width: 100%;
-    height: 100%;
+.Tab .content {
+    margin-top: 40px;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-}
-
-@media only screen and (max-width: 632px) {
-    .nav {
-        flex-direction: column;
-        gap: 1rem;
-    }
+    align-items: center;
 }
