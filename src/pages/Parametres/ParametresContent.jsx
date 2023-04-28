@@ -53,7 +53,7 @@ const ParametresContent = () => {
     };
 
     return (
-        <div className="ParametresContent">
+        <div className="newEmp">
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="PRC">PRC</label>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Add.css";
 import Tab from "../../../Components/Tab/Tab";
 import axios from "axios";
 import { FaBackward } from "react-icons/fa";
@@ -8,6 +7,8 @@ import { auth } from "../../../atoms/auth";
 
 const Add = () => {
     const { uid } = useRecoilValue(auth);
+    const [loading, setloading] = useState(false);
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
     const [employe, setEmploye] = useState({
         id: uid,
         Avance: "",
@@ -40,6 +41,9 @@ const Add = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setloading(true);
+        await delay(500);
+
         try {
             const response = await axios.post(
                 "http://localhost:3001/employees/add",
@@ -65,6 +69,8 @@ const Add = () => {
                 allocation_familial: "",
                 Prime_technicite: "",
             });
+            setloading(false);
+
             return response.data;
         } catch (error) {
             console.error(error);
@@ -74,12 +80,12 @@ const Add = () => {
     return (
         <Tab
             content={
-                <>
+                <div className="newEmp">
                     {" "}
-                    <p onClick={() => window.history.back()} className="return">
+                    <p onClick={() => window.history.back()}>
                         <span>Retour</span> <FaBackward />
                     </p>
-                    <form className="newForm" onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                         <div>
                             <label htmlFor="Nom">Nom</label>
                             <input
@@ -277,9 +283,11 @@ const Add = () => {
                                 required
                             />
                         </div>
-                        <button type="submit">Ajouter</button>
+                        <button type="submit">
+                            {loading ? "Chargement" : "Ajouter"}
+                        </button>
                     </form>
-                </>
+                </div>
             }
         />
     );

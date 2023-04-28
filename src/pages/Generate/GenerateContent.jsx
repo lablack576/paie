@@ -40,7 +40,7 @@ const GenerateContent = () => {
             .catch((error) => {
                 console.error(error);
             });
-    }, []);
+    }, [uid]);
 
     const exportToExcel = (data) => {
         const workbook = XLSX.utils.book_new();
@@ -230,6 +230,10 @@ const GenerateContent = () => {
     if (isFinished) {
         return (
             <div className="final_finished">
+                <h2>
+                    Cliquer sur le bouton ci-dessous pour générer le journal de
+                    paie
+                </h2>
                 <button
                     onClick={() => {
                         exportToExcel(employees);
@@ -242,7 +246,7 @@ const GenerateContent = () => {
     }
 
     return (employees ? employees.length !== 0 : false) ? (
-        <>
+        <div className="newEmp">
             <h1>
                 Employé {currentIndex + 1} sur {employees.length}
             </h1>
@@ -311,6 +315,9 @@ const GenerateContent = () => {
 
                 <div className="pivot">
                     <button
+                        style={{
+                            backgroundColor: currentIndex === 0 && "#9ba4b5",
+                        }}
                         disabled={currentIndex === 0}
                         onClick={handlePrevious}
                     >
@@ -323,7 +330,7 @@ const GenerateContent = () => {
                     </button>
                 </div>
             </form>
-        </>
+        </div>
     ) : (
         "Liste vide, veuillez d'abord saisir des employées"
     );

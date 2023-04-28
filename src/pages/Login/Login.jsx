@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useSetRecoilState } from "recoil";
 import { auth } from "../../atoms/auth";
-import "./Login.css";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -42,37 +41,37 @@ const Login = () => {
     };
 
     return (
-        <div className="formX">
-            {" "}
+        <div className="content">
             <form onSubmit={handleLogin}>
-                <label htmlFor="username">Nom d'utilisateur :</label>
-                <input
-                    type="text"
-                    id="username"
-                    value={username}
-                    placeholder="Nom d'utilisateur"
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-                <br />
-                <label htmlFor="password">Mot de passe :</label>
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Mot de passe"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
+                <h2>Se connecter</h2>
+                <div>
+                    <input
+                        type="text"
+                        id="username"
+                        value={username}
+                        placeholder="Nom d'utilisateur"
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Mot de passe"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
                 {error && (
-                    <p className="inc">
-                        Nom d'utilisateur ou mot de passe incorret
+                    <p className="incorrect-message">
+                        Veuillez réessayer plus tard
                     </p>
                 )}
-                <br />
                 <button type="submit">Se connecter</button>
                 <br />
-                <p className="hdForm">
+                <p className="login-message">
                     Pas encore membre ?
                     <span
                         onClick={() => {

@@ -1,5 +1,4 @@
 import React from "react";
-import "./Employes.css";
 import Tab from "../../Components/Tab/Tab";
 import EmployesContent from "./EmployesContent";
 

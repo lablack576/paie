@@ -1,5 +1,4 @@
 import React from "react";
-import "./Generate.css";
 import Tab from "../../Components/Tab/Tab";
 import GenerateContent from "./GenerateContent";
 

@@ -62,10 +62,11 @@ const EmployesContent = () => {
     }
 
     return (
-        <div className="employes-content">
-            <div className="header">
-                <h1>Liste des employés</h1>
+        <div>
+            <div className="nav-emp">
+                <h2>Liste des employés</h2>
                 <button
+                    className="nav-emp-button"
                     onClick={() => {
                         navigate("/Add");
                     }}
@@ -73,7 +74,7 @@ const EmployesContent = () => {
                     Ajouter
                 </button>
             </div>
-            <div className="inputSearch">
+            <div className="research">
                 <input
                     type="text"
                     placeholder="Rechercher par nom ou prénom..."
@@ -82,7 +83,7 @@ const EmployesContent = () => {
                 />
                 <FiSearch id="icon" />
             </div>
-            <table>
+            <table className="employee-table">
                 <thead>
                     <tr>
                         <th>Matricule</th>
@@ -99,10 +100,14 @@ const EmployesContent = () => {
                     )}
                 </tbody>
             </table>
+
             <ul className="pagination">
                 {pageNumbers.map((pageNumber, idx) => (
                     <li key={idx}>
-                        <button onClick={() => handlePagination(pageNumber)}>
+                        <button
+                            className="page-number"
+                            onClick={() => handlePagination(pageNumber)}
+                        >
                             {pageNumber}
                         </button>
                     </li>

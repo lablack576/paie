@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./New.css";
 import { useParams } from "react-router-dom";
 import Tab from "../../../Components/Tab/Tab";
 import axios from "axios";
@@ -12,6 +11,7 @@ const New = () => {
     const { uid } = useRecoilValue(auth);
     const { itemID } = useParams();
     const navigate = useNavigate();
+    const [loading, setloading] = useState(false);
     const [employe, setEmploye] = useState({
         id: "",
         Avance: "",
@@ -73,9 +73,13 @@ const New = () => {
         };
         fetchEmployee();
     }, [itemID, uid]);
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setloading(true);
+        await delay(500);
+
         axios
             .put(
                 `http://localhost:3001/employees/${employe.Matricule}`,
@@ -83,6 +87,7 @@ const New = () => {
             )
             .then((response) => {
                 console.log(response.data);
+                setloading(false);
                 // Handle successful update here
             })
             .catch((error) => {
@@ -92,34 +97,37 @@ const New = () => {
     };
 
     const handleDelete = (matricule) => {
-        axios
-            .delete(`http://localhost:3001/employeesDelete/${matricule}/${uid}`)
-            .then((response) => {
-                console.log("Employee record deleted successfully");
-                navigate("/");
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        if (
+            window.confirm("Etes-vous sûr(e) de vouloir effacer cet employé ?")
+        ) {
+            axios
+                .delete(
+                    `http://localhost:3001/employeesDelete/${matricule}/${uid}`
+                )
+                .then((response) => {
+                    console.log("Employee record deleted successfully");
+                    navigate("/");
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
     };
     return (
         <Tab
             content={
                 employe ? (
-                    <>
-                        <p
-                            onClick={() => window.history.back()}
-                            className="return"
-                        >
-                            <span>Retour</span> <FaBackward />
-                        </p>
-                        <p
-                            onClick={() => handleDelete(itemID)}
-                            className="return"
-                        >
-                            <span>Effacer</span> <FaTrash />
-                        </p>
-                        <form className="newForm" onSubmit={handleSubmit}>
+                    <div className="newEmp">
+                        <div className="ret-emp">
+                            {" "}
+                            <p onClick={() => window.history.back()}>
+                                <span>Retour</span> <FaBackward />
+                            </p>
+                            <p onClick={() => handleDelete(itemID)}>
+                                <span>Effacer</span> <FaTrash />
+                            </p>
+                        </div>
+                        <form onSubmit={handleSubmit}>
                             <div>
                                 <label htmlFor="Nom">Nom</label>
                                 <input
@@ -317,9 +325,11 @@ const New = () => {
                                     required
                                 />
                             </div>
-                            <button type="submit">Modifier</button>
+                            <button type="submit">
+                                {loading ? "Chargement" : "Modifier"}
+                            </button>
                         </form>
-                    </>
+                    </div>
                 ) : (
                     <p>Loading...</p>
                 )
